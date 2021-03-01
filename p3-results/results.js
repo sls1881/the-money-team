@@ -2,7 +2,7 @@
 import { labelArray, dataArray } from '../mungeUtils.js';
 import { getExpenses, getUser } from '../localStorage.js';
 import { percentMaker, adviceGenerator } from './functions.js';
-import { message } from './adviceMessages.js';
+import { messageMap } from './adviceMessages.js';
 
 //call functions
 const expenseItem = getExpenses();
@@ -21,6 +21,16 @@ for (let item in expenseItem) {
 
 totalMessage.textContent = `You've used ${Math.ceil((percentMaker(userItem.income, totalExpense)) * 100)}% of your monthly income.`;
 
+function makeMessage(result, expenseName){
+    `${expenseName.charAt(0).toUpperCase() + expenseName.slice(1)}: ${messageMap[expenseName][result]}`;   
+}
+
+const domMap = {
+    car: adviceDisplayCar,
+    other: adviceDisplayOther,
+    utilities: adviceDisplayUtilities,
+};
+
 //iterates through properties of expenseItem and outputs advice depending on how much was spent
 for (let property in expenseItem) {
     const expenseName = property;
@@ -31,22 +41,16 @@ for (let property in expenseItem) {
     if (expenseName === 'house' || expenseName === 'food') {
         adviceDisplayCar.textContent += '';
     } else {
-        if (expenseName === 'car') {
-            adviceDisplayCar.textContent += `${expenseName.charAt(0).toUpperCase() + expenseName.slice(1)}: ${message(result, expenseName)}`;
-        } else if (expenseName === 'other') {
-            adviceDisplayOther.textContent += `${expenseName.charAt(0).toUpperCase() + expenseName.slice(1)}: ${message(result, expenseName)}`;
-        } else if (expenseName === 'utilities') {
-            adviceDisplayUtilities.textContent += `${expenseName.charAt(0).toUpperCase() + expenseName.slice(1)}: ${message(result, expenseName)}`;
-        }
-        else {
-            adviceDisplaySavings.textContent += `${expenseName.charAt(0).toUpperCase() + expenseName.slice(1)}: ${message(result, expenseName)}`;
-        }
+        // i didn't test it, but something like this seems like it could make your code more concise
+        const dom = domMap[expenseName] || adviceDisplaySavings;
+
+        dom.textContent += makeMessage(result, expenseName);
     }
 }
 
 // Use conditionals to set message values
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, { // eslint-disable-line
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, { // eslint-disable-line
 
     // The type of chart we want to create
     type: 'bar',

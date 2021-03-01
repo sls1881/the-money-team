@@ -29,6 +29,7 @@ form.addEventListener('submit', (e) => {
 
 
     //compare new expenseItem to current EXPENSE in local storage
+    // nice use of dynamic property access to maintain state!
     expenseItem[expense] += Number(amount);
     //add new item to existing stored item
     setExpenses(expenseItem);

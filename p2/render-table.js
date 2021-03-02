@@ -1,13 +1,11 @@
-export function renderTableRow(userProfile, userExpense) {
-
-    const expenseItem = userExpense;
-    const userItem = userProfile;
+export function renderTableRow(userItem, expenseItem) {
     const carBudget = document.getElementById('car-budget');
     const carSpent = document.getElementById('car-spent');
     const carRemaining = document.getElementById('car-remaining');
 
     carBudget.textContent = userItem.expenses.car;
     carSpent.textContent = expenseItem.car;
+    // nice use of nested object properties thoughout this function
     carRemaining.textContent = Number(userItem.expenses.car) - Number(expenseItem.car);
 
     const foodBudget = document.getElementById('food-budget');
